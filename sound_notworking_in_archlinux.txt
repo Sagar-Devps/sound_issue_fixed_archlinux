@@ -1,0 +1,38 @@
+WHEN THE SOUND DOESNOT WORK IN ARCHLINUX AND HAVE TO RETSART THE PIPEWIRE MANAULLY EVERYTIME YOU LOGIN THEN FOLLOWING CAN BE THE POSSIBLE SOLUTION
+1. Create a Custom Restart Script
+First, let's create a small script that will restart PipeWire.
+nano ~/.config/systemd/user/pipewire-restart.sh
+Add the following content to the script:
+
+bash
+Copy code
+#!/bin/bash
+# Sleep for a few seconds to allow system components to start
+sleep 5
+# Restart pipewire and pipewire-pulse
+systemctl --user restart pipewire pipewire-pulse
+
+2.Save and exit. Now make the script executable:
+chmod +x ~/.config/systemd/user/pipewire-restart.sh
+
+3.Create a Systemd Service for the Script
+Next, create a systemd service that runs the script after login:
+nano ~/.config/systemd/user/pipewire-restart.service
+Add the following content to the service file:
+
+[Unit]
+Description=Restart PipeWire and PipeWire Pulse after login
+After=graphical-session.target
+
+[Service]
+ExecStart=/home/<username>/.config/systemd/user/pipewire-restart.sh
+Type=oneshot
+
+[Install]
+WantedBy=default.target
+
+4.Enable the Custom Service
+Now enable the service to start after login:
+systemctl --user enable pipewire-restart.service
+
+5.Reboot and test
