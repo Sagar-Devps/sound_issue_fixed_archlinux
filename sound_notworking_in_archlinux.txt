@@ -4,8 +4,6 @@ First, let's create a small script that will restart PipeWire.
 nano ~/.config/systemd/user/pipewire-restart.sh
 Add the following content to the script:
 
-bash
-Copy code
 #!/bin/bash
 # Sleep for a few seconds to allow system components to start
 sleep 5
